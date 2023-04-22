@@ -1,0 +1,56 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(dplyr)
+library(ggplot2)
+diamonds<-read.csv("D:\\Maestria\\Primer trimestre\\Scripting\\diamonds.csv")
+```
+
+
+```{r}
+#1.Dispersión
+ggplot(diamonds, aes(x=carat, y=price, color=clarity))+ geom_point()
+
+
+```
+```{r}
+ggplot(diamonds, aes(x=price))+geom_histogram(bins=40)+ scale_x_log10()
+```
+```{r}
+ggplot(diamonds, aes(x=cut, y=price, scale_x_log10(), fill=cut))+geom_boxplot()
+```
+```{r}
+filtered_price<- diamonds%>%
+  filter(price>1000)%>%
+  filter(cut %in% c("Ideal","Good","Premium"))
+  
+
+ggplot(filtered_price, aes(x = cut, y=depth,fill=clarity))+geom_col()+facet_wrap(~clarity)
+```
+```{r}
+median_dimension_diamond<-diamonds %>%
+  group_by(cut)%>%
+  summarise(mediaX=mean(x), medianY=mean(y), medianZ=mean(z))
+```
+```{r}
+cut_premium<-diamonds%>%
+  filter(cut=="Premium")%>%
+  group_by(clarity)%>%
+  summarise(minprice=min(price), maxprice=max(price))
+```
+```{r}
+ggplot(cut_premium, aes(x=clarity, y=maxprice, fill=clarity))+ geom_col()
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
